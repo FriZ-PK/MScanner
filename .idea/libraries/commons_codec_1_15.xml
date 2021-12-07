@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="commons-codec-1.15">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/commons-codec-1.15.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/commons-compress-1.20.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/curvesapi-1.06.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
