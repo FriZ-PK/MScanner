@@ -41,8 +41,9 @@ public class Main {
         //Если путь к файлу найден
         if(ar != null) {
             openFile = new File(ar);
+            startProgram(openFile);
         }
-        startProgram(openFile);
+
 
     }
 
@@ -54,7 +55,6 @@ public class Main {
 
             Gson gson = new Gson();
             String json = null;
-
             FileInputStream fin = null;
             fin = new FileInputStream(f);
             byte[] bytes = new byte[fin.available()];
