@@ -43,8 +43,6 @@ public class Main {
             openFile = new File(ar);
             startProgram(openFile);
         }
-
-
     }
 
     public static void startProgram(File f) throws IOException {
@@ -120,6 +118,7 @@ public class Main {
         return out.toByteArray();
     }
 
+    //СТРОКИ И ЯЧЕЙКИ НУМЕРУЮТСЯ С 0------!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     //Сохраняем в excel
     public static void writeIntoExcel(int delivery,double itemPrice,double itemPriceDop,int interest,int slopes,int mounting,int other,
                                       String nameMeasure, List<String> itemNameLst,
@@ -166,17 +165,11 @@ public class Main {
         cell = row.getCell(8);
         cell.setCellValue(delivery);
 
-        //Доставка
+        //Курс
         cell = row.getCell(10);
         cell.setCellValue(course);
 
-        //Регион и версия приложения в строке 22 (нумерация с 0)
-        row = sheet.getRow(20);
-
-        //Регион в ячейке под номер 9 (Нумерация с 0)
-        cell = row.getCell(8);
-        cell.setCellValue(region);
-        //Версия в ячейке под номером 12 (Нумерация с 0)
+        //Версия приложения
         cell = row.getCell(11);
         cell.setCellValue(version);
 
@@ -188,29 +181,29 @@ public class Main {
             row = sheet.getRow(i + 3);
 
             //Наименование изделий
-            cell = row.getCell(14);
+            cell = row.getCell(17);
             cell.setCellValue((i+1) + ". " + itemNameLst.get(i));
 
             //Если есть цена изделий
             if(itemPriceLst.get(i) != 0) {
-                cell = row.getCell(20);
+                cell = row.getCell(23);
                 cell.setCellValue(itemPriceLst.get(i));
             }
             //Если есть цена монтажа
             else if (prodMountingLst.get(i) != 0){
-                cell = row.getCell(21);
+                cell = row.getCell(24);
                 cell.setCellValue(prodMountingLst.get(i));
             }
             //Если есть цена откосов
             else {
-                cell = row.getCell(21);
+                cell = row.getCell(24);
                 cell.setCellValue(prodSlopesLst.get(i));
             }
 
             //Если есть информация об изделии, то присваиваем комментарий
-            //i - позиция в списке, (+2 - на две строки опускаем вниз)
+            //i - позиция в списке, (+3 - на две строки опускаем вниз)
             if(!itemInfoLst.get(i).equals("")) {
-                comment = patr.createCellComment(new XSSFClientAnchor(0, 0, 0, 0, 14, (i + 3), 17, (i+3+15)));
+                comment = patr.createCellComment(new XSSFClientAnchor(0, 0, 0, 0, 17, (i + 3), 20, (i+3+15)));
                 comment.setString(new XSSFRichTextString(itemInfoLst.get(i)));
             }
 
@@ -221,11 +214,11 @@ public class Main {
             row = sheet.getRow(itemNameLst.size() + 3);
 
             //Наименование изделий
-            cell = row.getCell(14);
+            cell = row.getCell(17);
             cell.setCellValue("Прочее:");
 
             //Цена
-            cell = row.getCell(21);
+            cell = row.getCell(23);
             cell.setCellValue(other);
 
         }

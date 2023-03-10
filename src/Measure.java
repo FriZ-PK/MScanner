@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Measure implements Serializable {
 
-    private String version;
+    private String versionData;
 
     private boolean region = false;
 
@@ -102,7 +102,7 @@ public class Measure implements Serializable {
     }
 
     public String getVersion() {
-        return this.version;
+        return this.versionData;
     }
 
     public List<String> getListItem() {
