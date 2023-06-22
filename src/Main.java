@@ -3,6 +3,7 @@ import com.google.gson.reflect.TypeToken;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.*;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 import java.awt.*;
 import java.io.*;
@@ -126,6 +127,8 @@ public class Main {
                                       List<Integer> prodMountingLst, List<Integer> prodSlopesLst,
                                       String region, String version, double course) throws IOException {
 
+        double standPrice = 0;
+
         //Создаем папку на рабочем столе, если она отсутсвует
         File f = new File(System.getProperty("user.home") + "\\Desktop\\MScanner");
         f.mkdir();
@@ -203,6 +206,11 @@ public class Main {
             //Если есть информация об изделии, то присваиваем комментарий
             //i - позиция в списке, (+3 - на две строки опускаем вниз)
             if(!itemInfoLst.get(i).equals("")) {
+
+                //Берем первую строку описания и вычиняем из нее цену подставочника
+                String[] str = itemInfoLst.get(i).split("\n");
+                standPrice += getStandPrice(str[0]);
+
                 comment = patr.createCellComment(new XSSFClientAnchor(0, 0, 0, 0, 17, (i + 3), 20, (i+3+15)));
                 comment.setString(new XSSFRichTextString(itemInfoLst.get(i)));
             }
@@ -210,18 +218,29 @@ public class Main {
         }
 
         //Если что то было отдельно в прочее, нужно добавить
-        if(other != 0) {
-            row = sheet.getRow(itemNameLst.size() + 3);
+        row = sheet.getRow(itemNameLst.size() + 3);
 
-            //Наименование изделий
-            cell = row.getCell(17);
-            cell.setCellValue("Прочее:");
+        //Наименование изделий
+        cell = row.getCell(17);
+        cell.setCellValue("Прочее:");
 
-            //Цена
-            cell = row.getCell(23);
-            cell.setCellValue(other);
+        //Цена
+        cell = row.getCell(23);
+        cell.setCellValue(other);
 
-        }
+//================================================================
+        //Заполняем стоимость подставочного профиля
+        row = sheet.getRow(itemNameLst.size() + 4);
+
+        //Наименование изделий
+        cell = row.getCell(17);
+        cell.setCellValue("Подставочный профиль:");
+
+        //Цена
+        cell = row.getCell(23);
+        cell.setCellValue(standPrice);
+//================================================================
+
 
         //Обновляем все
         XSSFFormulaEvaluator.evaluateAllFormulaCells(book);
@@ -229,6 +248,22 @@ public class Main {
         // Записываем всё в файл
         book.write(new FileOutputStream(outPath));
         book.close();
+    }
+
+
+    //Вычленяет стоимость подставочника
+    public static double getStandPrice(String e) {
+        String result  = "";
+
+        if(e.contains("УНЗ_№_") && !e.contains("G")) {
+            result = e.replace("УНЗ_№_", "");
+            result = result.replace('V', '.');
+        }
+        else {
+            return 0;
+        }
+
+        return Double.parseDouble(result);
     }
 
 }
