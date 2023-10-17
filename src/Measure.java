@@ -11,6 +11,7 @@ public class Measure implements Serializable {
     private double course;
     private int delivery;
     private int other;
+    private int plus;
 
     private List<String> prodList = new ArrayList<>();
     private List<String> itemInfo = new ArrayList<>();
@@ -86,6 +87,9 @@ public class Measure implements Serializable {
 
     public int getOther() {
         return other;
+    }
+    public int getPlus() {
+        return plus;
     }
 
     public int getSlopes() {

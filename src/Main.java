@@ -16,6 +16,7 @@ public class Main {
 
     static int delivery;
     static int other;
+    static int plus;
     static int mounting;
     static int slopes;
     static int interest;
@@ -78,6 +79,7 @@ public class Main {
 
             delivery = tmpHashMap.get(nameMeasure).getDelivery();
             other = tmpHashMap.get(nameMeasure).getOther();
+            plus = tmpHashMap.get(nameMeasure).getPlus();
             mounting = tmpHashMap.get(nameMeasure).getMounting();
             slopes = tmpHashMap.get(nameMeasure).getSlopes();
             interest = tmpHashMap.get(nameMeasure).getProdInterest();
@@ -88,7 +90,7 @@ public class Main {
 
             //Сохраняем в excel
             try {
-                writeIntoExcel(delivery, itemPrice, itemPriceDop, interest, slopes, mounting, other, nameMeasure,
+                writeIntoExcel(delivery, itemPrice, itemPriceDop, interest, slopes, mounting, other, plus, nameMeasure,
                         tmpHashMap.get(nameMeasure).getListItem(),tmpHashMap.get(nameMeasure).getItemInfo(),
                         tmpHashMap.get(nameMeasure).getProdItemPriceLst(),
                         tmpHashMap.get(nameMeasure).getProdMounting(), tmpHashMap.get(nameMeasure).getProdSlopes(),
@@ -121,7 +123,7 @@ public class Main {
 
     //СТРОКИ И ЯЧЕЙКИ НУМЕРУЮТСЯ С 0------!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     //Сохраняем в excel
-    public static void writeIntoExcel(int delivery,double itemPrice,double itemPriceDop,int interest,int slopes,int mounting,int other,
+    public static void writeIntoExcel(int delivery,double itemPrice,double itemPriceDop,int interest,int slopes,int mounting, int other, int plus,
                                       String nameMeasure, List<String> itemNameLst,
                                       List<String> itemInfoLst,List<Double> itemPriceLst,
                                       List<Integer> prodMountingLst, List<Integer> prodSlopesLst,
@@ -144,8 +146,12 @@ public class Main {
 
         Row row = sheet.getRow(2);
 
+        //ПЛЮС
+        Cell cell = row.getCell(2);
+        cell.setCellValue(plus);
+
         //Прочее
-        Cell cell = row.getCell(3);
+        cell = row.getCell(3);
         cell.setCellValue(other + itemPriceDop);
 
         //Монтаж
@@ -169,11 +175,11 @@ public class Main {
         cell.setCellValue(delivery);
 
         //Курс
-        cell = row.getCell(10);
+        cell = row.getCell(9);
         cell.setCellValue(course);
 
         //Версия приложения
-        cell = row.getCell(11);
+        cell = row.getCell(10);
         cell.setCellValue(version);
 
         XSSFDrawing patr = sheet.createDrawingPatriarch();
@@ -184,22 +190,22 @@ public class Main {
             row = sheet.getRow(i + 3);
 
             //Наименование изделий
-            cell = row.getCell(17);
+            cell = row.getCell(16);
             cell.setCellValue((i+1) + ". " + itemNameLst.get(i));
 
             //Если есть цена изделий
             if(itemPriceLst.get(i) != 0) {
-                cell = row.getCell(23);
+                cell = row.getCell(22);
                 cell.setCellValue(itemPriceLst.get(i));
             }
             //Если есть цена монтажа
             else if (prodMountingLst.get(i) != 0){
-                cell = row.getCell(24);
+                cell = row.getCell(23);
                 cell.setCellValue(prodMountingLst.get(i));
             }
             //Если есть цена откосов
             else {
-                cell = row.getCell(24);
+                cell = row.getCell(23);
                 cell.setCellValue(prodSlopesLst.get(i));
             }
 
@@ -211,7 +217,7 @@ public class Main {
                 String[] str = itemInfoLst.get(i).split("\n");
                 standPrice += getStandPrice(str[0]);
 
-                comment = patr.createCellComment(new XSSFClientAnchor(0, 0, 0, 0, 17, (i + 3), 20, (i+3+15)));
+                comment = patr.createCellComment(new XSSFClientAnchor(0, 0, 0, 0, 16, (i + 3), 20, (i+3+15)));
                 comment.setString(new XSSFRichTextString(itemInfoLst.get(i)));
             }
 
@@ -220,12 +226,12 @@ public class Main {
         //Если что то было отдельно в прочее, нужно добавить
         row = sheet.getRow(itemNameLst.size() + 3);
 
-        //Наименование изделий
-        cell = row.getCell(17);
+        //Наименование изделий (ПРОЧЕЕ, что-бы видеть, что конкретно ввел замерщик и различать стоимость нащельников пвх и бруса)
+        cell = row.getCell(16);
         cell.setCellValue("Прочее:");
 
         //Цена
-        cell = row.getCell(23);
+        cell = row.getCell(22);
         cell.setCellValue(other);
 
 //================================================================
@@ -233,11 +239,11 @@ public class Main {
         row = sheet.getRow(itemNameLst.size() + 4);
 
         //Наименование изделий
-        cell = row.getCell(17);
+        cell = row.getCell(16);
         cell.setCellValue("Подставочный профиль:");
 
         //Цена
-        cell = row.getCell(23);
+        cell = row.getCell(22);
         cell.setCellValue(standPrice);
 //================================================================
 
