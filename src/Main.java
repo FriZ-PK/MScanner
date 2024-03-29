@@ -24,6 +24,7 @@ public class Main {
     static double itemPriceDop;
     static double course;
     static String region;
+    static boolean isStand;
 
     static String nameMeasure;
     //Путь к файлу
@@ -87,6 +88,7 @@ public class Main {
             itemPriceDop = Math.ceil(tmpHashMap.get(nameMeasure).getProdItemPriceDop());
             region = tmpHashMap.get(nameMeasure).getRegion() ? "Регион" : "Минск";
             course = tmpHashMap.get(nameMeasure).getCourse();
+            isStand = tmpHashMap.get(nameMeasure).isStand();
 
             //Сохраняем в excel
             try {
@@ -94,7 +96,7 @@ public class Main {
                         tmpHashMap.get(nameMeasure).getListItem(),tmpHashMap.get(nameMeasure).getItemInfo(),
                         tmpHashMap.get(nameMeasure).getProdItemPriceLst(),
                         tmpHashMap.get(nameMeasure).getProdMounting(), tmpHashMap.get(nameMeasure).getProdSlopes(),
-                        region, tmpHashMap.get(nameMeasure).getVersion(), course);
+                        region, tmpHashMap.get(nameMeasure).getVersion(), course, isStand);
             }catch (FileNotFoundException ignored) {
             }
 
@@ -127,7 +129,7 @@ public class Main {
                                       String nameMeasure, List<String> itemNameLst,
                                       List<String> itemInfoLst,List<Double> itemPriceLst,
                                       List<Integer> prodMountingLst, List<Integer> prodSlopesLst,
-                                      String region, String version, double course) throws IOException {
+                                      String region, String version, double course, boolean isStand) throws IOException {
 
         double standPrice = 0;
 
@@ -165,10 +167,6 @@ public class Main {
         //Интерес
         cell = row.getCell(6);
         cell.setCellValue(interest);
-
-        //Стоимость изделий
-        cell = row.getCell(7);
-        cell.setCellValue(itemPrice);
 
         //Доставка
         cell = row.getCell(8);
@@ -223,6 +221,11 @@ public class Main {
 
         }
 
+        row = sheet.getRow(2);
+        //Стоимость изделий
+        cell = row.getCell(7);
+        cell.setCellValue(itemPrice - standPrice);
+
         //Если что то было отдельно в прочее, нужно добавить
         row = sheet.getRow(itemNameLst.size() + 3);
 
@@ -244,7 +247,7 @@ public class Main {
 
         //Цена
         cell = row.getCell(22);
-        cell.setCellValue(standPrice);
+        cell.setCellValue(isStand ? standPrice : 0);
 //================================================================
 
 

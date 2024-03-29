@@ -13,6 +13,16 @@ public class Measure implements Serializable {
     private int other;
     private int plus;
 
+    private boolean isStand;
+
+    public boolean isStand() {
+        return isStand;
+    }
+
+    public void setStand(boolean stand) {
+        isStand = stand;
+    }
+
     private List<String> prodList = new ArrayList<>();
     private List<String> itemInfo = new ArrayList<>();
     private List<Double> prodItemPrice = new ArrayList<>();
