@@ -3,7 +3,6 @@ import com.google.gson.reflect.TypeToken;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.*;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 import java.awt.*;
 import java.io.*;
@@ -224,7 +223,7 @@ public class Main {
         row = sheet.getRow(2);
         //Стоимость изделий
         cell = row.getCell(7);
-        cell.setCellValue(itemPrice - standPrice);
+        cell.setCellValue(!isStand ? itemPrice - standPrice : itemPrice);
 
         //Если что то было отдельно в прочее, нужно добавить
         row = sheet.getRow(itemNameLst.size() + 3);
